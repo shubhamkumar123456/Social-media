@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUserByToken } from './store/userSlice'
 import ForgetPassword from './pages/ForgetPassword'
+import Profilepage from './pages/Profilepage'
 
 const App = () => {
   let userSlice = useSelector((state)=>state.user);
@@ -29,6 +30,7 @@ const App = () => {
        </div>
             <Routes>
                   <Route path='/' element={login===true? <Home/> : <Navigate to={'/login'}/>}/>
+                  <Route path='/profile' element={login===true? <Profilepage/> : <Navigate to={'/login'}/>}/>
                   <Route path='/signup' element={login===false? <Signup/> : <Navigate to={'/'}/>}/>
                   <Route path='/login' element={login===false? <Login/> :<Navigate to={'/'}/>}/>
                   <Route path='/forget-password' element={login===false? <ForgetPassword/> :<Navigate to={'/'}/>}/>

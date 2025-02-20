@@ -27,10 +27,12 @@ UserSchema.add({
         default:null
     },
     profilePic:{
-        type:String
+        type:String,
+        default:"https://media.istockphoto.com/id/1223671392/vector/default-profile-picture-avatar-photo-placeholder-vector-illustration.jpg?s=612x612&w=0&k=20&c=s0aTdmT5aU6b8ot7VKm11DeID6NctRCpB755rA1BIP0="
     },
     coverPic:{
-        type:String
+        type:String,
+        default:"https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg"
     },
     bio:{
         type:String

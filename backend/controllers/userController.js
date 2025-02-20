@@ -58,13 +58,13 @@ const loginUser = async (req, res) => {
 }
 const updateUser = async (req, res) => {
     // res.send("update is running");
-    const {name,password,phone} = req.body;
+    const {name,password,phone,profilePic,coverPic,bio} = req.body;
     const id = req.user._id
 
     if(password){
         var hashedPassword = bcrypt.hashSync(password,salt)
     }    
-    let data = await userCollection.findByIdAndUpdate( id,{name,password:hashedPassword,phone},{new:true});
+    let data = await userCollection.findByIdAndUpdate( id,{name,password:hashedPassword,profilePic,coverPic,bio,phone},{new:true});
     res.status(200).json({msg:"updated successfully",data});
 
 }

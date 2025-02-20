@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { logoutUser } from '../store/userSlice';
 import { IoIosSearch } from "react-icons/io";
 
@@ -12,16 +12,16 @@ const Navbar = () => {
   return (
     <div>
 
-      <nav className="bg-[rgb(128,128,128,0.1)]  fixed text-white w-full flex  justify-between items-center mx-auto px-8 h-[60px]">
+      <nav className="bg-black z-50  fixed text-white w-full flex  justify-between items-center mx-auto px-8 h-[60px]">
         {/* logo */}
         <div className="inline-flex">
-          <a className="_o6689fn" href="/">
+          <Link className="_o6689fn" to="/">
           <div className="flex items-center">
            <img className='h-12 w-15' src="https://i0.wp.com/eltallerdehector.com/wp-content/uploads/2022/06/6a198-instagram-logo-png.png?fit=512%2C512&ssl=1" alt="" />
            <h1>FriendsWeb</h1>
           </div>
           
-          </a>
+          </Link>
         </div>
         {/* end logo */}
         {/* search bar */}
