@@ -3,10 +3,14 @@ import React, { useState } from 'react'
 
 import Posts from '../components/Posts';
 import CoverPic from '../components/CoverPic';
+import { useSelector } from 'react-redux';
 
 
 const Profilepage = () => {
 
+
+  let userSlice = useSelector((state) => state.user);
+  // console.log(userSlice)
   
 
   return (

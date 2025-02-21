@@ -2,7 +2,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 let userDetails = JSON.parse(localStorage.getItem('mediaApp'))
-console.log(userDetails)
+// console.log(userDetails)
+
 const initialState = {
   login:userDetails? userDetails.login : false,
   token: userDetails?  userDetails.token: '',
@@ -17,7 +18,7 @@ export const fetchUserByToken = createAsyncThunk(
             'Authorization':token
         }
       })
-      console.log(response)
+      // console.log(response)
       return response.data
     },
   )
@@ -43,7 +44,7 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(fetchUserByToken.fulfilled, (state, action) => {
-        console.log(action)
+        // console.log(action)
         state.user = action.payload
       // Add user to the state array
     //   state.entities.push(action.payload)

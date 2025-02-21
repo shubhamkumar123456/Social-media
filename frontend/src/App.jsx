@@ -11,33 +11,34 @@ import ForgetPassword from './pages/ForgetPassword'
 import Profilepage from './pages/Profilepage'
 
 const App = () => {
-  let userSlice = useSelector((state)=>state.user);
+  let userSlice = useSelector((state) => state.user);
+  // console.log(userSlice)
   let token = userSlice.token
   let login = userSlice.login
-  console.log(userSlice)
+  // console.log(userSlice)
   let dispatch = useDispatch()
 
-  useEffect(()=>{
-      if(token){
-        dispatch(fetchUserByToken(token))
-      }
-  },[token])
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchUserByToken(token))
+    }
+  }, [token])
   return (
     <div>
-        <BrowserRouter>
-       <div className='h-[65px]'>
-       <Navbar/>
-       </div>
-            <Routes>
-                  <Route path='/' element={login===true? <Home/> : <Navigate to={'/login'}/>}/>
-                  <Route path='/profile' element={login===true? <Profilepage/> : <Navigate to={'/login'}/>}/>
-                  <Route path='/signup' element={login===false? <Signup/> : <Navigate to={'/'}/>}/>
-                  <Route path='/login' element={login===false? <Login/> :<Navigate to={'/'}/>}/>
-                  <Route path='/forget-password' element={login===false? <ForgetPassword/> :<Navigate to={'/'}/>}/>
-            </Routes>
+      <BrowserRouter>
+        <div className='h-[65px]'>
+          <Navbar />
+        </div>
+        <Routes>
+          <Route path='/' element={login === true ? <Home /> : <Navigate to={'/login'} />} />
+          <Route path='/profile' element={login === true ? <Profilepage /> : <Navigate to={'/login'} />} />
+          <Route path='/signup' element={login === false ? <Signup /> : <Navigate to={'/'} />} />
+          <Route path='/login' element={login === false ? <Login /> : <Navigate to={'/'} />} />
+          <Route path='/forget-password' element={login === false ? <ForgetPassword /> : <Navigate to={'/'} />} />
+        </Routes>
 
-            <ToastContainer/>
-        </BrowserRouter>
+        <ToastContainer />
+      </BrowserRouter>
     </div>
   )
 }
