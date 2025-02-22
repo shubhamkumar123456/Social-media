@@ -43,7 +43,7 @@ const Login = () => {
    <div className="font-[sans-serif] h-[80vh]">
   <div className="grid lg:grid-cols-2 md:grid-cols-2 items-center h-[80vh] gap-4">
     <div className=" h-[90vh] p-5 text-white  bg-amber-400">
-      <img src="https://readymadeui.com/image-3.webp" className="w-full h-full " alt="login-image" />
+      {/* <img src="https://readymadeui.com/image-3.webp" className="w-full h-full " alt="login-image" /> */}
     </div>
     <form className="max-w-xl w-full text-white p-6 mx-auto">
       <div className="mb-12 text-white">
