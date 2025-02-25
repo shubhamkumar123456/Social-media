@@ -7,7 +7,7 @@ const cors = require('cors')
 connection()
 
 const userRouter = require('./routes/userRoutes')
-
+const postRouter = require('./routes/postRoutes')
 
 app.use(cors())
 app.use(express.json())
@@ -21,6 +21,8 @@ app.get('/',(req,res)=>{
 
 
 app.use('/users',userRouter)
+app.use('/posts',postRouter)
+
 app.listen(port,()=>{
     console.log(`server is running on port ${port}`)
 })
