@@ -17,7 +17,7 @@ import SendOutlined from '@mui/icons-material/SendOutlined';
 import Face from '@mui/icons-material/Face';
 import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
 
-export default function Posts() {
+export default function Posts(props) {
     return (
         <Card
             variant="outlined"
@@ -54,7 +54,7 @@ export default function Posts() {
             </CardContent>
             <CardOverflow>
                 <AspectRatio>
-                    <img src="https://deep-image.ai/_next/static/media/0-generative-after.3b9277ac.webp" alt="" loading="lazy" />
+                    <img src={props.ele.file[0]} alt="" loading="lazy" />
                 </AspectRatio>
             </CardOverflow>
             <CardContent orientation="horizontal" sx={{ alignItems: 'center', mx: -1 }}>

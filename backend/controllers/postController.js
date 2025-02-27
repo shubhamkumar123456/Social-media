@@ -23,10 +23,11 @@ const deletePost = async (req, res) => {
 
 }
 const getAllYouPost = async (req, res) => {
-
+    let posts = await PostCollection.find();
+    res.status(200).json({posts})
 }
 const allUsersPost = async (req, res) => {
-
+  
 }
 
 module.exports = {
