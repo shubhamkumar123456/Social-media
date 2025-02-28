@@ -16,8 +16,21 @@ import ModeCommentOutlined from '@mui/icons-material/ModeCommentOutlined';
 import SendOutlined from '@mui/icons-material/SendOutlined';
 import Face from '@mui/icons-material/Face';
 import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 export default function Posts(props) {
+    const settings = {
+  
+        infinite: false,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        swipeToSlide: true,
+        arrows:false,
+        dots:true
+      };
     return (
         <Card
             variant="outlined"
@@ -52,11 +65,23 @@ export default function Posts(props) {
                     <MoreHoriz />
                 </IconButton>
             </CardContent>
-            <CardOverflow>
-                <AspectRatio>
-                    <img src={props.ele.file[0]} alt="" loading="lazy" />
-                </AspectRatio>
-            </CardOverflow>
+        
+        <Slider {...settings} className='h-[250px] relative flex'>
+    {
+        props.ele.file.map((url, index) => (
+            url.includes('image') ? (
+                <div key={index}>
+                    <img className='w-full object-contain h-[250px]' src={url} alt={`Slide ${index + 1}`} />
+                </div>
+            ) : (
+                <div key={index}>
+                    <video className='w-full h-[250px]' controls src={url}></video>
+                </div>
+            )
+        ))
+    }
+</Slider>
+
             <CardContent orientation="horizontal" sx={{ alignItems: 'center', mx: -1 }}>
                 <Box sx={{ width: 0, display: 'flex', gap: 0.5 }}>
                     <IconButton variant="plain" color="neutral" size="sm">
@@ -69,23 +94,7 @@ export default function Posts(props) {
                         <SendOutlined />
                     </IconButton>
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mx: 'auto' }}>
-                    {[...Array(5)].map((_, index) => (
-                        <Box
-                            key={index}
-                            sx={[
-                                {
-                                    borderRadius: '50%',
-                                    width: `max(${6 - index}px, 3px)`,
-                                    height: `max(${6 - index}px, 3px)`,
-                                },
-                                index === 0
-                                    ? { bgcolor: 'primary.solidBg' }
-                                    : { bgcolor: 'background.level3' },
-                            ]}
-                        />
-                    ))}
-                </Box>
+               
                 <Box sx={{ width: 0, display: 'flex', flexDirection: 'row-reverse' }}>
                     <IconButton variant="plain" color="neutral" size="sm">
                         <BookmarkBorderRoundedIcon />

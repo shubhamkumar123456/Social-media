@@ -1,15 +1,33 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 
 import Posts from '../components/Posts';
 import CoverPic from '../components/CoverPic';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 
 const Profilepage = () => {
 
 
   let userSlice = useSelector((state) => state.user);
+  const [posts, setposts] = useState([]);
+  let getAllPosts = async()=>{
+    console.log("hello")
+    let res = await axios.get('http://localhost:8080/posts/yourPosts',{
+      headers:{
+        'Authorization':userSlice.token
+      }
+    })
+    console.log(res)
+    let data = res.data;
+    console.log(data.posts)
+    setposts(data.posts)
+  }
+
+  useEffect(()=>{
+    getAllPosts()
+  },[])
   // console.log(userSlice)
   
 
@@ -38,16 +56,12 @@ const Profilepage = () => {
     
       </div>
 
-      <div className='bottomBox w-max flex flex-col gap-2 m-auto'>
-            <Posts/>
-            <Posts/>
-            <Posts/>
-            <Posts/>
-            <Posts/>
-            <Posts/>
-            <Posts/>
-            <Posts/>
-      </div>
+     
+      <div className='max-w-1/4 m-auto  flex flex-col gap-2'>
+                   {posts.map((ele,i)=>{
+                     return <Posts ele={ele}/>
+                   })}
+                 </div>
     </div>
   )
 }

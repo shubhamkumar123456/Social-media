@@ -7,12 +7,12 @@ import { useSelector } from 'react-redux'
 
 
 const Home = () => {
-  const [posts, setposts] = useState([]);
   let userSlice = useSelector((state) => state.user);
   // console.log(userSlice)
+  const [posts, setposts] = useState([]);
   let getAllPosts = async()=>{
     console.log("hello")
-    let res = await axios.get('http://localhost:8080/posts/yourPosts',{
+    let res = await axios.get('http://localhost:8080/posts/allUsersPosts',{
       headers:{
         'Authorization':userSlice.token
       }
