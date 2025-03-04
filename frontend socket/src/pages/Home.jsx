@@ -31,14 +31,14 @@ const Home = () => {
     <div className='flex h-[80vh]'>
     {/* Sidebar - Fixed */}
     <div className='fixed top-[65px] left-0 w-[240px] h-[calc(100vh-65px)] bg-white'>
-      <Sidebarcomp getAllPosts = {getAllPosts}/>
+      <Sidebarcomp />
     </div>
   
     {/* Main Content - Pushed right, scrollable */}
     <div className='ml-[240px] flex-1  overflow-y-auto  bg-amber-300' style={{ height: 'calc(100vh - 65px)' }}>
-        <div className='max-w-1/3 m-auto  flex flex-col gap-2'>
+        <div className='max-w-1/2 m-auto  flex flex-col gap-2'>
           {posts.map((ele,i)=>{
-            return <Posts key ={ele._id} ele={ele}/>
+            return <Posts ele={ele}/>
           })}
         </div>
     </div>

@@ -135,7 +135,7 @@ const resetPassword = async(req,res)=>{
 }
 
 const getLoggedInUser = async(req,res)=>{
-        console.log(req.user)
+        // console.log(req.user)
         res.status(200).json(req.user)
 }
 

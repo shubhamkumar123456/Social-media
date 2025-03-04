@@ -11,6 +11,7 @@ const postSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         require:true,
         ref:"users"
+
     },
     likes:[
         {
@@ -50,5 +51,5 @@ const postSchema = new mongoose.Schema({
             ]
     }
     ]
-})
+},{timestamps:true})
 module.exports = mongoose.model('posts',postSchema);

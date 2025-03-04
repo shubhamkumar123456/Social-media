@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify';
 
-const Sidebarcomp = (props) => {
+const Sidebarcomp = () => {
 
     let userSlice = useSelector((state)=>state.user);
     console.log(userSlice)
@@ -77,9 +77,7 @@ const Sidebarcomp = (props) => {
         let data = res.data;
         console.log(data)
         if(res.status==201){
-         
             toast.success(data.msg,{position:"top-center"})
-            props.getAllPosts()
             titleRef.current.value = ""
             descriptionRef.current.value = ""
             setuloadedFiles('')

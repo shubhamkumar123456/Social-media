@@ -15,10 +15,10 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import ModeCommentOutlined from '@mui/icons-material/ModeCommentOutlined';
 import SendOutlined from '@mui/icons-material/SendOutlined';
 import Face from '@mui/icons-material/Face';
+import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import { formatDistanceToNow } from 'date-fns';
 
 export default function Posts(props) {
     const settings = {
@@ -55,34 +55,32 @@ export default function Posts(props) {
                     }}
                 >
                     <Avatar
-                        size="md"
-                        src={props.ele.userId.profilePic}
-                        sx={{ border: '2px solid',borderRadius:'100%', borderColor: 'background.body' }}
+                        size="sm"
+                        src="/static/logo.png"
+                        sx={{ p: 0.5, border: '2px solid', borderColor: 'background.body' }}
                     />
                 </Box>
-                <Typography sx={{ fontWeight: 'lg' }}>{props.ele.userId.name}</Typography>
+                <Typography sx={{ fontWeight: 'lg' }}>MUI</Typography>
                 <IconButton variant="plain" color="neutral" size="sm" sx={{ ml: 'auto' }}>
                     <MoreHoriz />
                 </IconButton>
             </CardContent>
         
-   {  props.ele.file.length >0   &&   <Slider {...settings} className='h-[250px] relative flex'>
+        <Slider {...settings} className='h-[250px] relative flex'>
     {
         props.ele.file.map((url, index) => (
             url.includes('image') ? (
                 <div key={index}>
                     <img className='w-full object-contain h-[250px]' src={url} alt={`Slide ${index + 1}`} />
                 </div>
-            ) :(
+            ) : (
                 <div key={index}>
                     <video className='w-full h-[250px]' controls src={url}></video>
                 </div>
             )
-            
-            
         ))
     }
-</Slider>}
+</Slider>
 
             <CardContent orientation="horizontal" sx={{ alignItems: 'center', mx: -1 }}>
                 <Box sx={{ width: 0, display: 'flex', gap: 0.5 }}>
@@ -97,7 +95,11 @@ export default function Posts(props) {
                     </IconButton>
                 </Box>
                
-             
+                <Box sx={{ width: 0, display: 'flex', flexDirection: 'row-reverse' }}>
+                    <IconButton variant="plain" color="neutral" size="sm">
+                        <BookmarkBorderRoundedIcon />
+                    </IconButton>
+                </Box>
             </CardContent>
             <CardContent>
                 <Link
@@ -106,11 +108,18 @@ export default function Posts(props) {
                     textColor="text.primary"
                     sx={{ fontSize: 'sm', fontWeight: 'lg' }}
                 >
-                    {props.ele.likes.length} Likes
+                    8.1M Likes
                 </Link>
                 <Typography sx={{ fontSize: 'sm' }}>
-                   
-                   {props.ele.title}
+                    <Link
+                        component="button"
+                        color="neutral"
+                        textColor="text.primary"
+                        sx={{ fontWeight: 'lg' }}
+                    >
+                        MUI
+                    </Link>{' '}
+                    The React component library you always wanted
                 </Typography>
                 <Link
                     component="button"
@@ -125,7 +134,7 @@ export default function Posts(props) {
                     underline="none"
                     sx={{ fontSize: '10px', color: 'text.tertiary', my: 0.5 }}
                 >
-                   {props.ele.createdAt && formatDistanceToNow(new Date(props.ele.createdAt), { addSuffix: true })}
+                    2 DAYS AGO
                 </Link>
             </CardContent>
             <CardContent orientation="horizontal" sx={{ gap: 1 }}>
