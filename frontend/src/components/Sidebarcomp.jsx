@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 
 const Sidebarcomp = (props) => {
 
+    let fileUploaderRef = useRef()
     let userSlice = useSelector((state)=>state.user);
     console.log(userSlice)
 
@@ -61,12 +62,17 @@ const Sidebarcomp = (props) => {
 
     const handleSubmit = async(e)=>{
         e.preventDefault()
+        // fileUploaderRef.current.files=""
         let obj = {
             title:titleRef.current.value,
             description:descriptionRef.current.value,
-            file:liveFiles
+           
+        }
+        if(liveFiles){
+            obj.file = liveFiles
         }
 
+      
         console.log(obj)
       try {
         let res = await axios.post('http://localhost:8080/posts/create',obj,{
@@ -84,6 +90,7 @@ const Sidebarcomp = (props) => {
             descriptionRef.current.value = ""
             setuloadedFiles('')
             setIsModalOpen(false);
+            setliveFiles('')
         }else{
             toast.error('something went wrong',{position:'top-center'})
         }
@@ -112,7 +119,7 @@ const Sidebarcomp = (props) => {
                 <textarea ref={descriptionRef} className='px-4 py-2 rounded-md border' name="" id=""></textarea>
 
                 <label  className='bg-green-700 rounded-md text-center w-max hover:bg-green-600 px-4 py-2 text-white' htmlFor="file">Upload</label>
-                <input  onChange={handleFileChanger} id='file' multiple hidden type="file" />
+                <input ref={fileUploaderRef}  onChange={handleFileChanger} id='file' multiple hidden type="file" />
 {uloadedFiles && <div className='grid grid-cols-3 gap-1 '>
     
 {

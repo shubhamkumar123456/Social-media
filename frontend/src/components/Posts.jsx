@@ -19,8 +19,31 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { formatDistanceToNow } from 'date-fns';
-
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { FaHeart } from "react-icons/fa";
 export default function Posts(props) {
+
+        let userSlice = useSelector((state)=>state.user)
+        let userId = userSlice.user?._id
+        console.log(userId)
+
+
+    const handleLike = async(obj)=>{
+        console.log(obj)
+        let res = await axios.get(`http://localhost:8080/posts/likePost/${obj._id}`,{
+            headers:{
+                'Authorization':userSlice.token
+            }
+        })
+        let data = res.data
+        props.getAllPosts()
+        console.log(data)
+        toast.success(data.msg)
+    }
+
+
     const settings = {
   
         infinite: false,
@@ -65,6 +88,14 @@ export default function Posts(props) {
                     <MoreHoriz />
                 </IconButton>
             </CardContent>
+
+            {
+                !props.ele.file.length && <div className='min-h-[150px] '>
+                    <div className='flex min-h-[150px] justify-center items-center'>
+                      <p className='text-center'>  {props.ele.title}</p>
+                    </div>
+                </div>
+            }
         
    {  props.ele.file.length >0   &&   <Slider {...settings} className='h-[250px] relative flex'>
     {
@@ -86,9 +117,13 @@ export default function Posts(props) {
 
             <CardContent orientation="horizontal" sx={{ alignItems: 'center', mx: -1 }}>
                 <Box sx={{ width: 0, display: 'flex', gap: 0.5 }}>
-                    <IconButton variant="plain" color="neutral" size="sm">
-                        <FavoriteBorder />
-                    </IconButton>
+                   {!props.ele.likes.includes(userId) && <IconButton onClick={()=>handleLike(props.ele)} variant="plain" color="neutral" size="sm">
+                        <FavoriteBorder />       
+                    </IconButton>}
+                  {props.ele.likes.includes(userId) &&  <IconButton  onClick={()=>handleLike(props.ele)}   color="danger" size="sm">
+                        <FaHeart size={22}/>       
+                    </IconButton>}
+                    <FaHeart color='red' size={30}/>
                     <IconButton variant="plain" color="neutral" size="sm">
                         <ModeCommentOutlined />
                     </IconButton>
@@ -108,10 +143,11 @@ export default function Posts(props) {
                 >
                     {props.ele.likes.length} Likes
                 </Link>
-                <Typography sx={{ fontSize: 'sm' }}>
+
+               { props.ele.file.length>0 &&<Typography sx={{ fontSize: 'sm' }}>
                    
                    {props.ele.title}
-                </Typography>
+                </Typography>}
                 <Link
                     component="button"
                     underline="none"

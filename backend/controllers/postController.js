@@ -34,18 +34,18 @@ const allUsersPost = async (req, res) => {
 }
 
 const likesPost = async(req,res)=>{
-    let postId = req.params;
+    let {postId} = req.params;
     const { _id } = req.user;
 
    try {
     let post = await PostCollection.findById(postId)
-    if(post.likes.includes(userId)){
-        post.likes.pull(userId)
+    if(post.likes.includes(_id)){
+        post.likes.pull(_id)
         await post.save()
         res.status(200).json({msg:'post disliked successfully'})
     }
     else{
-        post.likes.push(userId)
+        post.likes.push(_id)
         await post.save()
         res.status(200).json({msg:'post liked successfully'})
     }
@@ -65,6 +65,7 @@ module.exports = {
     updatePost,
     deletePost,
     getAllYouPost,
-    allUsersPost
+    allUsersPost,
+    likesPost
 }
 

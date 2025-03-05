@@ -38,7 +38,7 @@ const Home = () => {
     <div className='ml-[240px] flex-1  overflow-y-auto  bg-amber-300' style={{ height: 'calc(100vh - 65px)' }}>
         <div className='max-w-1/3 m-auto  flex flex-col gap-2'>
           {posts.map((ele,i)=>{
-            return <Posts key ={ele._id} ele={ele}/>
+            return <Posts getAllPosts= {getAllPosts} key ={ele._id} ele={ele}/>
           })}
         </div>
     </div>
