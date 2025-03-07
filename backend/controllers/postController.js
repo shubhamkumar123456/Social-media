@@ -24,12 +24,12 @@ const deletePost = async (req, res) => {
 }
 const getAllYouPost = async (req, res) => {
     let {_id} = req.user
-    let posts = await PostCollection.find({userId:_id}).populate({path:'userId',select:'-password'}).sort({createdAt:-1})
+    let posts = await PostCollection.find({userId:_id}).populate({path:'userId',select:'-password'}).sort({createdAt:-1}).populate({path:'comment',populate:{path:'userId',select:"profilePic name"}})
     res.status(200).json({posts})
 }
 
 const allUsersPost = async (req, res) => {
-    let posts = await PostCollection.find().populate({path:'userId',select:'-password'}).sort({createdAt:-1})
+    let posts = await PostCollection.find().populate({path:'userId',select:'-password'}).sort({createdAt:-1}).populate({path:'comment',populate:{path:'userId',select:"profilePic name"}})
     res.status(200).json({posts})
 }
 
@@ -51,11 +51,21 @@ const likesPost = async(req,res)=>{
     }
    } catch (error) {
     res.status(500).json({error:error.message})
-   }
-   
+   }   
+}
 
-   
-    
+const commentPost = async(req,res)=>{
+    let {postId} = req.params;
+    const { _id } = req.user;
+    let {text} = req.body;
+
+    let post = await PostCollection.findById(postId);
+
+    post.comment.push({userId:_id, text:text})
+    await post.save()
+
+    res.status(200).json({msg:"comment added successfully"})
+
 }
 
 
@@ -66,6 +76,7 @@ module.exports = {
     deletePost,
     getAllYouPost,
     allUsersPost,
-    likesPost
+    likesPost,
+    commentPost
 }
 

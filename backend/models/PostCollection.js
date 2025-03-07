@@ -1,55 +1,57 @@
 const mongoose = require('mongoose');
 const postSchema = new mongoose.Schema({
-    title:{
-        type:String,
+    title: {
+        type: String,
     },
-    description:{
-        type:String
+    description: {
+        type: String
     },
-    file:[],
-    userId:{
-        type:mongoose.Schema.Types.ObjectId,
-        require:true,
-        ref:"users"
+    file: [],
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        require: true,
+        ref: "users"
 
     },
-    likes:[
+    likes: [
         {
-           
-                type:mongoose.Schema.Types.ObjectId,
-                require:true,
-                ref:"users"
-            
+
+            type: mongoose.Schema.Types.ObjectId,
+            require: true,
+            ref: "users"
+
         }
     ],
-    comment:[
+    comment: [
         {
-            userId:{
-                type:mongoose.Schema.Types.ObjectId,
-                require:true,
-                ref:"users"
+            userId: {
+                type: mongoose.Schema.Types.ObjectId,
+                require: true,
+                ref: "users"
             },
-            text:{
-                type:String
+            text: {
+                type: String
             },
-            reply:{
-                userId:{
-                    type:mongoose.Schema.Types.ObjectId,
-                    ref:"users"
-                },
-                text:{
-                    type:String
-                }
-            },
-            commentLike:[
+            reply: [
                 {
-                    userId:{
-                        type:mongoose.Schema.Types.ObjectId,
-                        ref:"users"
+                    userId: {
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: "users"
+                    },
+                    text: {
+                        type: String
+                    }
+                }
+            ],
+            commentLike: [
+                {
+                    userId: {
+                        type: mongoose.Schema.Types.ObjectId,
+                        ref: "users"
                     }
                 }
             ]
-    }
+        }
     ]
-},{timestamps:true})
-module.exports = mongoose.model('posts',postSchema);
+}, { timestamps: true })
+module.exports = mongoose.model('posts', postSchema);

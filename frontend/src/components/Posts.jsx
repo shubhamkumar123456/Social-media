@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import * as React from 'react';
+import  React, { useRef, useState } from 'react';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Avatar from '@mui/joy/Avatar';
 import Box from '@mui/joy/Box';
@@ -23,8 +23,27 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { FaHeart } from "react-icons/fa";
+import { Modal } from 'antd';
+
 export default function Posts(props) {
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [seletcedPost, setseletcedPost] = useState('');
+    const showModal = (obj) => {
+        setseletcedPost(obj)
+      setIsModalOpen(true);
+    };
+  
+    const handleOk = () => {
+      setIsModalOpen(false);
+    };
+  
+    const handleCancel = () => {
+      setIsModalOpen(false);
+    };
+
+        let commentRef = useRef()
         let userSlice = useSelector((state)=>state.user)
         let userId = userSlice.user?._id
         console.log(userId)
@@ -54,8 +73,27 @@ export default function Posts(props) {
         arrows:false,
         dots:true
       };
+
+
+      const commentHandler = async(post)=>{
+        let text = commentRef.current.value;
+        console.log(text)
+        console.log(post)
+        let res = await axios.post(`http://localhost:8080/posts/commentPost/${post._id}`,{text},{
+            headers:{
+                'Authorization':userSlice.token
+            }
+        })
+        let data = res.data;
+        console.log(data)
+        commentRef.current.value = ''
+        props.getAllPosts()
+        toast.success(data.msg,{position:"bottom-right"})
+
+      }
     return (
-        <Card
+    <div>
+            <Card
             variant="outlined"
             sx={{ minWidth: 300, '--Card-radius': (theme) => theme.vars.radius.xs }}
         >
@@ -125,7 +163,7 @@ export default function Posts(props) {
                     </IconButton>}
                     <FaHeart color='red' size={30}/>
                     <IconButton variant="plain" color="neutral" size="sm">
-                        <ModeCommentOutlined />
+                        <ModeCommentOutlined onClick={()=>showModal(props.ele)}/>
                     </IconButton>
                     <IconButton variant="plain" color="neutral" size="sm">
                         <SendOutlined />
@@ -168,16 +206,36 @@ export default function Posts(props) {
                 <IconButton size="sm" variant="plain" color="neutral" sx={{ ml: -1 }}>
                     <Face />
                 </IconButton>
-                <Input
+                <input
+                className='ps-1 outline-none border rounded border-gray-300'
+                    ref= {commentRef}
                     variant="plain"
                     size="sm"
                     placeholder="Add a comment…"
                     sx={{ flex: 1, px: 0, '--Input-focusedThickness': '0px' }}
                 />
-                <Link disabled underline="none" role="button">
+                <button onClick={()=>commentHandler(props.ele)} className='cursor-pointer  bg-green-600 px-2 py-1 rounded-md text-white' type='button' role="button">
                     Post
-                </Link>
+                </button>
             </CardContent>
         </Card>
+        <Modal title="Comments" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        {
+           seletcedPost && seletcedPost.comment.map((ele)=>{
+                return <div className='mb-5'>
+                    <div className='flex gap-3 '>
+                        <img src={ele?.userId?.profilePic} className='w-[40px] h-[40px] rounded-full' alt="" />
+                        <div>
+                        <p className='font-semibold'>{ele?.userId?.name}</p>
+                        <p>{ele.text}</p>
+                        </div>
+                    </div>
+                    
+                </div>
+            })
+        }
+       
+      </Modal>
+    </div>
     );
 }
