@@ -68,6 +68,18 @@ const commentPost = async(req,res)=>{
 
 }
 
+const deleteComment = async(req,res)=>{
+    const {postId, commentId} = req.params;
+    console.log(postId)
+    console.log(commentId)
+
+    let post = await PostCollection.findById(postId);
+   let filterArr =  post.comment.filter((comnt)=>comnt._id.toString()!==commentId)
+    post.comment = filterArr
+    await post.save()
+    res.status(200).json({msg:"comment deleted successfully"})
+}
+
 
 
 module.exports = {
@@ -77,6 +89,7 @@ module.exports = {
     getAllYouPost,
     allUsersPost,
     likesPost,
-    commentPost
+    commentPost,
+    deleteComment
 }
 

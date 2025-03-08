@@ -1,5 +1,5 @@
 const express = require('express');
-const { createPost, updatePost, deletePost, getAllYouPost, allUsersPost, likesPost, commentPost } = require('../controllers/postController');
+const { createPost, updatePost, deletePost, getAllYouPost, allUsersPost, likesPost, commentPost, deleteComment } = require('../controllers/postController');
 const checkToken = require('../middleware/checkToken');
 const router = express.Router();
 
@@ -10,6 +10,7 @@ router.get('/allUsersPosts',checkToken,allUsersPost);
 router.get('/yourPosts',checkToken,getAllYouPost);
 router.get('/likePost/:postId',checkToken,likesPost)
 router.post('/commentPost/:postId',checkToken,commentPost)
+router.delete('/commentDelete/:postId/:commentId',deleteComment)
 
 
 

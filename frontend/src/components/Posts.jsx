@@ -5,7 +5,7 @@ import Avatar from '@mui/joy/Avatar';
 import Box from '@mui/joy/Box';
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
-import CardOverflow from '@mui/joy/CardOverflow';
+import { MdDelete } from "react-icons/md";
 import Link from '@mui/joy/Link';
 import IconButton from '@mui/joy/IconButton';
 import Input from '@mui/joy/Input';
@@ -30,6 +30,8 @@ export default function Posts(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [seletcedPost, setseletcedPost] = useState('');
+
+    console.log(seletcedPost)
     const showModal = (obj) => {
         setseletcedPost(obj)
       setIsModalOpen(true);
@@ -90,6 +92,17 @@ export default function Posts(props) {
         props.getAllPosts()
         toast.success(data.msg,{position:"bottom-right"})
 
+      }
+      const handleCommentDelete = async(obj)=>{
+        console.log(obj)
+        console.log(props.ele)
+        let res = await axios.delete(`http://localhost:8080/posts/commentDelete/${props.ele._id}/${obj._id}`)
+        let data = res.data;
+        console.log(data)
+        toast.success(data.msg,{position:'bottom-right'})
+        props.getAllPosts()
+
+   
       }
     return (
     <div>
@@ -164,6 +177,7 @@ export default function Posts(props) {
                     <FaHeart color='red' size={30}/>
                     <IconButton variant="plain" color="neutral" size="sm">
                         <ModeCommentOutlined onClick={()=>showModal(props.ele)}/>
+                            <sup className='-mt-3 text-sm text-red-600'>{props.ele.comment.length}</sup>
                     </IconButton>
                     <IconButton variant="plain" color="neutral" size="sm">
                         <SendOutlined />
@@ -221,8 +235,8 @@ export default function Posts(props) {
         </Card>
         <Modal title="Comments" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         {
-           seletcedPost && seletcedPost.comment.map((ele)=>{
-                return <div className='mb-5'>
+           props?.ele?.comment.map((ele)=>{
+                return <div className='mb-5 flex justify-between'>
                     <div className='flex gap-3 '>
                         <img src={ele?.userId?.profilePic} className='w-[40px] h-[40px] rounded-full' alt="" />
                         <div>
@@ -230,7 +244,7 @@ export default function Posts(props) {
                         <p>{ele.text}</p>
                         </div>
                     </div>
-                    
+                   {userId===ele.userId._id && <MdDelete onClick={()=>handleCommentDelete(ele)}  size={20} color='red'/>}
                 </div>
             })
         }
