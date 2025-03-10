@@ -221,7 +221,7 @@ export default function Posts(props) {
                     <Face />
                 </IconButton>
                 <input
-                className='ps-1 outline-none border rounded border-gray-300'
+                className='ps-1 w-full outline-none border rounded border-gray-300'
                     ref= {commentRef}
                     variant="plain"
                     size="sm"
@@ -234,20 +234,27 @@ export default function Posts(props) {
             </CardContent>
         </Card>
         <Modal title="Comments" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        {
-           props?.ele?.comment.map((ele)=>{
-                return <div className='mb-5 flex justify-between'>
-                    <div className='flex gap-3 '>
-                        <img src={ele?.userId?.profilePic} className='w-[40px] h-[40px] rounded-full' alt="" />
-                        <div>
-                        <p className='font-semibold'>{ele?.userId?.name}</p>
-                        <p>{ele.text}</p>
+
+            {
+               props.ele.comment.length>0?   <div>
+               {
+                   props?.ele?.comment.map((ele)=>{
+                        return <div className='mb-5 flex justify-between'>
+                            <div className='flex gap-3 '>
+                                <img src={ele?.userId?.profilePic} className='w-[40px] h-[40px] rounded-full' alt="" />
+                                <div>
+                                <p className='font-semibold'>{ele?.userId?.name}</p>
+                                <p>{ele.text}</p>
+                                </div>
+                            </div>
+                           {userId===ele.userId._id && <MdDelete onClick={()=>handleCommentDelete(ele)}  size={20} color='red'/>}
                         </div>
-                    </div>
-                   {userId===ele.userId._id && <MdDelete onClick={()=>handleCommentDelete(ele)}  size={20} color='red'/>}
-                </div>
-            })
-        }
+                    })
+                }
+               </div> 
+               :
+               <h1 className='text-center my-2'>No comments to show</h1>
+            }
        
       </Modal>
     </div>

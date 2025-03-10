@@ -40,8 +40,8 @@ const loginUser = async (req, res) => {
             let comparePassword = bcrypt.compareSync(password, user.password)
             if (comparePassword) {
                 // let token = jwt.sign({}, secretKey)
-                let token = jwt.sign({_id:user._id}, JWT_SECRET)
-                res.cookie('token',token)
+                let token = jwt.sign({ _id: user._id }, JWT_SECRET)
+                res.cookie('token', token)
                 res.status(200).json({ msg: "user log in successfully", token })
 
             }
@@ -58,36 +58,36 @@ const loginUser = async (req, res) => {
 }
 const updateUser = async (req, res) => {
     // res.send("update is running");
-    const {name,password,phone,profilePic,coverPic,bio} = req.body;
+    const { name, password, phone, profilePic, coverPic, bio } = req.body;
     const id = req.user._id
 
-    if(password){
-        var hashedPassword = bcrypt.hashSync(password,salt)
-    }    
-    let data = await userCollection.findByIdAndUpdate( id,{name,password:hashedPassword,profilePic,coverPic,bio,phone},{new:true});
-    res.status(200).json({msg:"updated successfully",data});
+    if (password) {
+        var hashedPassword = bcrypt.hashSync(password, salt)
+    }
+    let data = await userCollection.findByIdAndUpdate(id, { name, password: hashedPassword, profilePic, coverPic, bio, phone }, { new: true });
+    res.status(200).json({ msg: "updated successfully", data });
 
 }
 
 const deleteUser = async (req, res) => {
     // const  {id} = req.params;
-    console.log(req.user)    
-try {
-    let data = await userCollection.findByIdAndDelete(req.user._id)
-    res.status(200).json({msg:"user deleted successfully"})
+    console.log(req.user)
+    try {
+        let data = await userCollection.findByIdAndDelete(req.user._id)
+        res.status(200).json({ msg: "user deleted successfully" })
 
-} catch (error) {
-    res.status(500).json({msg:"error in deleting user",error:error.message})
+    } catch (error) {
+        res.status(500).json({ msg: "error in deleting user", error: error.message })
+    }
+
 }
 
-}
+const forgetPassword = async (req, res) => {
+    const { email } = req.body;
+    let user = await userCollection.findOne({ email });
 
-const forgetPassword = async(req,res)=>{
-    const {email} = req.body;
-    let user = await userCollection.findOne({email});
-
-    if(user){
-        let resetToken =  randomstring.generate(25)
+    if (user) {
+        let resetToken = randomstring.generate(25)
         user.passwordResetToken = resetToken;
         await user.save()
         const transporter = nodemailer.createTransport({
@@ -95,48 +95,67 @@ const forgetPassword = async(req,res)=>{
             port: 587,
             secure: false, // true for port 465, false for other ports
             auth: {
-              user: "clboy768@gmail.com",
-              pass: "guot dszi tfya btlt",
+                user: "clboy768@gmail.com",
+                pass: "guot dszi tfya btlt",
             },
-          });
+        });
 
-          async function main() {
+        async function main() {
             // send mail with defined transport object
             const info = await transporter.sendMail({
-              from: 'clboy768@gmail.com', // sender address
-              to: email, // list of receivers
-              subject: "Password reset Request", // Subject line
-              text: ` please click the link  below to reset your password \n http://localhost:8080/users/passwordToken/${resetToken}`, // plain text body
-            
+                from: 'clboy768@gmail.com', // sender address
+                to: email, // list of receivers
+                subject: "Password reset Request", // Subject line
+                text: ` please click the link  below to reset your password \n http://localhost:8080/users/passwordToken/${resetToken}`, // plain text body
+
             });
-          
+
             console.log("Message sent: %s", info.messageId);
             // Message sent: <d786aa62-4e0a-070a-47ed-0b0666549519@ethereal.email>
-          }
-          
-          main().catch(console.error);
-          res.json({msg:"please check email for further informations"})
+        }
+
+        main().catch(console.error);
+        res.json({ msg: "please check email for further informations" })
     }
-    else{
-        return res.status(404).json({msg:"user not found"})
+    else {
+        return res.status(404).json({ msg: "user not found" })
     }
 }
 
-const resetPassword = async(req,res)=>{
-    const {token} = req.params;
-    const {password} = req.body;
+const resetPassword = async (req, res) => {
+    const { token } = req.params;
+    const { password } = req.body;
 
-    let user = await userCollection.findOne({passwordResetToken:token})
+    let user = await userCollection.findOne({ passwordResetToken: token })
     let hashedPassword = bcrypt.hashSync(password, salt)
     user.password = hashedPassword
     user.passwordResetToken = null
     await user.save();
-    res.status(200).json({msg:"password updated successfully"})
+    res.status(200).json({ msg: "password updated successfully" })
 }
 
-const getLoggedInUser = async(req,res)=>{
-        // console.log(req.user)
-        res.status(200).json(req.user)
+const getLoggedInUser = async (req, res) => {
+    // console.log(req.user)
+    res.status(200).json(req.user)
+}
+
+const searchUser = async (req, res) => {
+    let { name } = req.query;
+    console.log(name);
+    if(name===''){
+       return res.json({users:[]})
+    }
+    // let regex = new RegExp();
+
+    let users = await userCollection.find({ name: new RegExp(name) })
+    console.log(users)
+
+    res.status(200).json({users})
+
+}
+
+const getFriend = async(req,res)=>{
+    
 }
 
 module.exports = {
@@ -146,5 +165,6 @@ module.exports = {
     deleteUser,
     forgetPassword,
     resetPassword,
-    getLoggedInUser
+    getLoggedInUser,
+    searchUser
 }

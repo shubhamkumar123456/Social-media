@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchUserByToken } from './store/userSlice'
 import ForgetPassword from './pages/ForgetPassword'
 import Profilepage from './pages/Profilepage'
+import FriendProfile from './pages/FriendProfile'
 
 const App = () => {
   let userSlice = useSelector((state) => state.user);
@@ -35,6 +36,7 @@ const App = () => {
           <Route path='/signup' element={login === false ? <Signup /> : <Navigate to={'/'} />} />
           <Route path='/login' element={login === false ? <Login /> : <Navigate to={'/'} />} />
           <Route path='/forget-password' element={login === false ? <ForgetPassword /> : <Navigate to={'/'} />} />
+          <Route path='/friendProfile' element={login === true ? <FriendProfile /> : <Navigate to={'/login'} />} />
         </Routes>
 
         <ToastContainer />

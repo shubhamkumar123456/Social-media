@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerUser, loginUser, updateUser, deleteUser, forgetPassword, resetPassword, getLoggedInUser } = require('../controllers/userController'); //{}
+const { registerUser, loginUser, updateUser, deleteUser, forgetPassword, resetPassword, getLoggedInUser, searchUser } = require('../controllers/userController'); //{}
 const checkToken = require('../middleware/checkToken');
 const router = express.Router();
 const path = require('path')
@@ -27,7 +27,9 @@ router.get('/passwordToken/:token',async(req,res)=>{
 
 router.post('/passwordToken/:token', resetPassword)
 
-router.get('/loggedInUser',checkToken ,getLoggedInUser)
+router.get('/loggedInUser',checkToken ,getLoggedInUser);
+
+router.get('/searchUser',searchUser)
 
 
 

@@ -3,12 +3,23 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { logoutUser } from '../store/userSlice';
 import { IoIosSearch } from "react-icons/io";
+import axios from 'axios';
 
 const Navbar = () => {
   const [show, setshow] = useState(false);
 
   let dispatch = useDispatch()
   let navigate = useNavigate()
+
+  const [searchedUsers, setSearchedUsers] = useState([]);
+
+  const handleSearchChanger = async(e)=>{
+      // console.log(e.target.value)
+      let res = await axios.get(`http://localhost:8080/users/searchUser?name=${e.target.value}`)
+      let data = res.data;
+      console.log(data)
+      setSearchedUsers(data.users)
+  }
   return (
     <div>
 
@@ -27,7 +38,7 @@ const Navbar = () => {
         {/* search bar */}
         <div className="hidden sm:block flex-shrink flex-grow-0 justify-start px-2">
           <div className="inline-block">
-            <div className="inline-flex items-center max-w-full">
+            <div className="inline-flex relative items-center max-w-full">
               {/* <button className="flex items-center flex-grow-0 flex-shrink pl-2 relative w-60 border rounded-full px-1  py-1" type="button">
           <div className="block flex-grow flex-shrink overflow-hidden">Start your search</div>
           <div className="flex items-center justify-center relative  h-8 w-8 rounded-full">
@@ -35,9 +46,20 @@ const Navbar = () => {
           </div>
         </button> */}
               <form action="" className='  flex items-center'>
-                <input type="text" placeholder='search a user' className='px-4 py-2 pr-6 rounded-md border outline-none ' />
-                <IoIosSearch className='text-white cursor-pointer' size={30} color='white'/>
+                <input onChange={handleSearchChanger} type="text" placeholder='search a user' className='px-4 py-2 pr-6 rounded-md border outline-none ' />
+                {/* <IoIosSearch className='text-white cursor-pointer' size={30} color='white'/> */}
               </form>
+
+              <div className='bg-white text-black absolute top-full w-full'>
+                {
+                  searchedUsers.map((ele,i)=>{
+                    return <Link state={ele._id} to={`/friendProfile?name=${ele.name}&&id=${ele._id}`} className='flex items-center gap-4 px-2 py-2 border-b border-[#e1dbdb]'>
+                        <img className='w-12 h-12 rounded-full border-amber-500 border' src={ele.profilePic} alt="" />
+                        <h3>{ele.name}</h3>
+                    </Link>
+                  })
+                }
+              </div>
 
             </div>
           </div>
