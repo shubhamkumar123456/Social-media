@@ -10,11 +10,44 @@ import queryString from 'querystring';
 
 
 const FriendProfile = () => {
-
-  let location = useLocation();
-  console.log(location.state)
-
+  
   let userSlice = useSelector((state) => state.user);
+  let location = useLocation();
+  let friendId = location.state
+
+  const [friend, setfriend] = useState('');
+
+  let getFriendData = async()=>{
+    let res = await axios.get(`http://localhost:8080/users/getFriend/${friendId}`,{
+      headers:{
+        'Authorization':userSlice.token
+      }
+    })
+    let data = res.data
+    console.log(data)
+    setfriend(data.user)
+  }
+
+  useEffect(()=>{
+    getFriendData()
+  },[friendId])
+
+  const [friendPosts, setfriendPosts] = useState([]);
+  const getFriendPost = async()=>{
+   let res = await axios.get(`http://localhost:8080/posts/friendPost/${friendId}`,{
+    headers:{
+      'Authorization':userSlice.token
+    }
+   })
+   let data = res.data
+   console.log(data.posts)
+   setfriendPosts(data.posts)
+  }
+
+
+  useEffect(()=>{
+    getFriendPost()
+  },[friendId])
 
   
 
@@ -24,14 +57,14 @@ const FriendProfile = () => {
     
       <div  className="topPart w-[90%] m-auto h-[45vh] relative bg-green-500">
       <div className=' w-full m-auto h-[45vh] relative bg-green-500'>
-     {/* <img className='w-full h-full object-cover' src={userSlice.user?.coverPic} alt="" /> */}
+     <img className='w-full h-full object-cover' src={friend?.coverPic} alt="" />
  
 
 
 <div className="profileBox">
    <div className=' absolute bottom-[-75px] left-[5%] w-[175px] h-[175px] rounded-full border-amber-800 border-2'>
-         {/* <img src={userSlice.user?.profilePic} className='w-full h-full object-center rounded-full object-cover' alt="" /> */}
-             <h3 className='text-center mt-3 text-xl'>Kunfu panda</h3>
+         <img src={friend?.profilePic} className='w-full h-full object-center rounded-full object-cover' alt="" />
+             <h3 className='text-center mt-3 text-xl'>{friend?.name}</h3>
            
      </div>  
 </div>
@@ -56,11 +89,11 @@ const FriendProfile = () => {
       </div>
 
      
-      <div className='max-w-1/4 m-auto  flex flex-col gap-2'>
-                   {[].map((ele,i)=>{
+      {friendPosts.length>0?<div className='max-w-1/4 m-auto  flex flex-col gap-2'>
+                   {friendPosts.map((ele,i)=>{
                      return <Posts ele={ele}/>
                    })}
-                 </div>
+      </div> : <h1 className='text-3xl text-center my-16'>No Post Yet</h1>}
     </div>
   )
 }

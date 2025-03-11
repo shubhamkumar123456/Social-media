@@ -140,6 +140,7 @@ const getLoggedInUser = async (req, res) => {
 }
 
 const searchUser = async (req, res) => {
+ try {
     let { name } = req.query;
     console.log(name);
     if(name===''){
@@ -151,11 +152,20 @@ const searchUser = async (req, res) => {
     console.log(users)
 
     res.status(200).json({users})
+ } catch (error) {
+    res.status(500).json({error:error.message})
+ }
 
 }
 
 const getFriend = async(req,res)=>{
-    
+        const {friendId} = req.params;
+       try {
+        let user  = await userCollection.findById(friendId).select('-password');
+        return res.status(200).json({user})
+       } catch (error) {
+        res.status(500).json({error:error.message})
+       }
 }
 
 module.exports = {
@@ -166,5 +176,6 @@ module.exports = {
     forgetPassword,
     resetPassword,
     getLoggedInUser,
-    searchUser
+    searchUser,
+    getFriend
 }

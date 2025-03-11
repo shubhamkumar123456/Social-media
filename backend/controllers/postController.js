@@ -1,4 +1,5 @@
 
+const { default: mongoose } = require('mongoose');
 const PostCollection = require('../models/PostCollection')
 
 const createPost = async (req, res) => {
@@ -80,6 +81,19 @@ const deleteComment = async(req,res)=>{
     res.status(200).json({msg:"comment deleted successfully"})
 }
 
+const friendPost = async(req,res)=>{
+   try {
+    let {friendId} = req.params;
+
+    let posts = await PostCollection.find({userId:friendId});
+
+    res.status(200).json({posts})
+   } catch (error) {
+    res.status(200).json({error:error.message})
+   }
+
+}
+
 
 
 module.exports = {
@@ -90,6 +104,7 @@ module.exports = {
     allUsersPost,
     likesPost,
     commentPost,
-    deleteComment
+    deleteComment,
+    friendPost
 }
 

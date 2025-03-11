@@ -1,17 +1,20 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { logoutUser } from '../store/userSlice';
+import { logoutUser, userSlice } from '../store/userSlice';
 import { IoIosSearch } from "react-icons/io";
 import axios from 'axios';
 
 const Navbar = () => {
+  let userSlice = useSelector((state)=>state.user);
+  console.log(userSlice)
   const [show, setshow] = useState(false);
 
   let dispatch = useDispatch()
   let navigate = useNavigate()
 
   const [searchedUsers, setSearchedUsers] = useState([]);
+  console.log(searchedUsers)
 
   const handleSearchChanger = async(e)=>{
       // console.log(e.target.value)
@@ -53,13 +56,18 @@ const Navbar = () => {
               <div className='bg-white text-black absolute top-full w-full'>
                 {
                   searchedUsers.map((ele,i)=>{
-                    return <Link state={ele._id} to={`/friendProfile?name=${ele.name}&&id=${ele._id}`} className='flex items-center gap-4 px-2 py-2 border-b border-[#e1dbdb]'>
+                    return ele._id===userSlice.user?._id?<Link state={ele._id} onClick={()=>setSearchedUsers([])} to={`/profile`} className='flex items-center gap-4 px-2 py-2 border-b border-[#e1dbdb]'>
+                    <img className='w-12 h-12 rounded-full border-amber-500 border' src={ele.profilePic} alt="" />
+                    <h3>{ele.name}</h3>
+                </Link>
+                :
+                <Link state={ele._id} onClick={()=>setSearchedUsers([])} to={`/friendProfile?name=${ele.name}&&id=${ele._id}`} className='flex items-center gap-4 px-2 py-2 border-b border-[#e1dbdb]'>
                         <img className='w-12 h-12 rounded-full border-amber-500 border' src={ele.profilePic} alt="" />
-                        <h3>{ele.name}</h3>
+                           <h3>{ele.name}</h3>
                     </Link>
                   })
                 }
-              </div>
+              </div> 
 
             </div>
           </div>
