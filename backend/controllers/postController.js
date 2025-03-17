@@ -85,7 +85,7 @@ const friendPost = async(req,res)=>{
    try {
     let {friendId} = req.params;
 
-    let posts = await PostCollection.find({userId:friendId});
+    let posts = await PostCollection.find({userId:friendId}).populate({path:'userId',select:'-password'}).sort({createdAt:-1}).populate({path:'comment',populate:{path:'userId',select:"profilePic name"}});
 
     res.status(200).json({posts})
    } catch (error) {

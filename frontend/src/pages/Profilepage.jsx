@@ -11,6 +11,7 @@ const Profilepage = () => {
 
 
   let userSlice = useSelector((state) => state.user);
+  console.log(userSlice)
   const [posts, setposts] = useState([]);
   let getAllPosts = async()=>{
     console.log("hello")
@@ -42,15 +43,15 @@ const Profilepage = () => {
         <div className='flex justify-center gap-7 '>
         <span>
             <b>Posts</b>
-            <p>50</p>
+            <p>{posts.length}</p>
         </span>
         <span>
             <b>Followers</b>
-            <p>100</p>
+            <p>{userSlice?.user?.followers?.length}</p>
         </span>
         <span>
             <b>Followings</b>
-            <p>500</p>
+            <p>{userSlice?.user?.followings?.length}</p>
         </span>
         </div>
     

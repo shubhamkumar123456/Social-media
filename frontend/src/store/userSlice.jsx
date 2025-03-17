@@ -38,6 +38,9 @@ export const userSlice = createSlice({
     state.login=false;
     state.token = '';
     state.user = ''
+   },
+   updateUser:(state,action)=>{
+    state.user = action.payload
    }
   },
 
@@ -53,6 +56,6 @@ export const userSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { loginUser, logoutUser } = userSlice.actions
+export const { loginUser, logoutUser,updateUser } = userSlice.actions
 
 export default userSlice.reducer

@@ -168,6 +168,50 @@ const getFriend = async(req,res)=>{
        }
 }
 
+const followUser = async(req,res)=>{
+    let {_id} = req.user;
+    let {friendId} = req.params;
+
+ try {
+    let user = await userCollection.findById(_id).select('-password');
+    let friend = await userCollection.findById(friendId).select('-password');
+
+    if(!user.followings.includes(friend._id)){
+        user.followings.push(friend._id)
+        friend.followers.push(user._id)
+        await user.save()
+        await friend.save()
+        res.status(200).json({msg:"follow successfully",user,friend})
+    }
+    else{
+        user.followings.pull(friend._id)
+        friend.followers.pull(user._id)
+        await user.save()
+        await friend.save()
+        res.status(200).json({msg:"unfollow successfully",user,friend})
+    }
+ } catch (error) {
+    res.status(500).json({error:error.message})
+ }
+}
+// const UnfollowUser = async(req,res)=>{
+//     let {_id} = req.user;
+//     let {friendId} = req.params;
+
+//  try {
+//     let user = await userCollection.findById(_id);
+//     let friend = await userCollection.findById(friendId);
+
+//     if(user.followings.includes(friend._id)){
+//         user.followings.pull(friend._id)
+//         await user.save()
+//     }
+//     res.status(200).json({msg:"follow successfully"})
+//  } catch (error) {
+//     res.status(500).json({error:error.message})
+//  }
+// }
+
 module.exports = {
     registerUser,
     loginUser,
@@ -177,5 +221,6 @@ module.exports = {
     resetPassword,
     getLoggedInUser,
     searchUser,
-    getFriend
+    getFriend,
+    followUser
 }

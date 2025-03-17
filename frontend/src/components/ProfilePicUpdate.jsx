@@ -37,7 +37,7 @@ const ProfilePicUpdate = () => {
   return (
     <div className=' absolute bottom-[-75px] left-[5%] w-[175px] h-[175px] rounded-full border-amber-800 border-2'>
         <img src={userSlice.user?.profilePic} className='w-full h-full object-center rounded-full object-cover' alt="" />
-            <h3 className='text-center mt-3 text-xl'>Kunfu panda</h3>
+            <h3 className='text-center mt-3 text-xl'>{userSlice?.user?.name} </h3>
             <div className='updateProfile absolute bottom-4 right-0'>
                 <label htmlFor="profile"><CiCamera size={35} color='yellow'/></label>
                 <input onChange={handleProfileChanger} type="file" hidden id='profile' />

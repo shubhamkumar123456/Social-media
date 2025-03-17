@@ -24,12 +24,14 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { FaHeart } from "react-icons/fa";
 import { Modal } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 export default function Posts(props) {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [seletcedPost, setseletcedPost] = useState('');
+    let navigate = useNavigate()
 
     console.log(seletcedPost)
     const showModal = (obj) => {
@@ -104,13 +106,25 @@ export default function Posts(props) {
 
    
       }
+
+
+      const handleClick = ()=>{
+        console.log("ok")
+        if(props?.ele?.userId?._id===userId){
+            navigate('/profile')
+        }
+        else{
+
+            navigate('/friendProfile', {state:props?.ele?.userId?._id})
+        }
+      }
     return (
     <div>
             <Card
             variant="outlined"
             sx={{ minWidth: 300, '--Card-radius': (theme) => theme.vars.radius.xs }}
         >
-            <CardContent orientation="horizontal" sx={{ alignItems: 'center', gap: 1 }}>
+            <CardContent onClick={handleClick} orientation="horizontal" sx={{ alignItems: 'center', gap: 1 }}>
                 <Box
                     sx={{
                         position: 'relative',
