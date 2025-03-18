@@ -91,10 +91,10 @@ const Navbar = () => {
 
               {show && <div className='absolute top-[130%] bg-white text-black rounded-lg right-0 w-[100px]'>
                 <ul className='flex flex-col text-center gap-2 '>
-                  <li onClick={() => navigate('/login')} className='px-4 border-b py-2'>Login</li>
-                  <li onClick={() => navigate('/signup')} className='px-4 border-b py-2'>Signup</li>
-                  <li onClick={() => navigate('/profile')} className='px-4 border-b py-2'>Profile</li>
-                  <li onClick={() => dispatch(logoutUser())} className='px-4 border-b py-2'>Logout</li>
+                 {userSlice.login===false && <li onClick={() => navigate('/login')} className='px-4 border-b py-2'>Login</li>}
+               {  userSlice.login===false && <li onClick={() => navigate('/signup')} className='px-4 border-b py-2'>Signup</li>}
+                 {userSlice.login===true && <li onClick={() => navigate('/profile')} className='px-4 border-b py-2'>Profile</li>}
+                { userSlice.login===true && <li onClick={() => dispatch(logoutUser())} className='px-4 border-b py-2'>Logout</li>}
                 </ul>
               </div>}
             </div>

@@ -10,6 +10,8 @@ connection()
 
 const userRouter = require('./routes/userRoutes')
 const postRouter = require('./routes/postRoutes')
+const chatRouter = require('./routes/chatRoutes')
+
 app.use(cors({
     origin: 'http://localhost:3000',  // Frontend URL
     credentials: true                 // Allow credentials (cookies, headers)
@@ -55,6 +57,7 @@ io.on('connection', (socket) => {
 
 app.use('/users', userRouter)
 app.use('/posts', postRouter)
+app.use('/chats', chatRouter)
 
 server.listen(port, () => {
     console.log(`server is running on port ${port}`)

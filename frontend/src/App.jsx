@@ -10,6 +10,7 @@ import { fetchUserByToken } from './store/userSlice'
 import ForgetPassword from './pages/ForgetPassword'
 import Profilepage from './pages/Profilepage'
 import FriendProfile from './pages/FriendProfile'
+import Chat from './pages/Chat'
 
 const App = () => {
   let userSlice = useSelector((state) => state.user);
@@ -37,6 +38,7 @@ const App = () => {
           <Route path='/login' element={login === false ? <Login /> : <Navigate to={'/'} />} />
           <Route path='/forget-password' element={login === false ? <ForgetPassword /> : <Navigate to={'/'} />} />
           <Route path='/friendProfile' element={login === true ? <FriendProfile /> : <Navigate to={'/login'} />} />
+          <Route path='/chat' element={login === true ? <Chat /> : <Navigate to={'/login'} />} />
         </Routes>
 
         <ToastContainer />
