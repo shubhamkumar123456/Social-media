@@ -104,7 +104,7 @@ const FriendProfile = () => {
         </div>
 
         <div className='flex gap-2 absolute right-0'>
-          <Link className='bg-blue-700 px-3 py-2 rounded-md hover:bg-blue-800 text-white' to={'/chat'}>Chat</Link>
+          <Link state={{friend:{id:friend._id, profilePic:friend.profilePic,name:friend.name}}} className='bg-blue-700 px-3 py-2 rounded-md hover:bg-blue-800 text-white' to={'/chat'}>Chat</Link>
           {
             friend?.followers?.includes(userSlice?.user?._id) ?
               <button onClick={handleFollow} className='bg-green-700 px-3 py-2 rounded-md hover:bg-green-800 text-white'>Unfollow</button>
