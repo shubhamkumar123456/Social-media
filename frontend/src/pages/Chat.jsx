@@ -2,8 +2,10 @@ import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom'
+import { socket } from "../store/socketSlice"; 
 
 const Chat = () => {
+  const chatContainerRef = useRef(null);
   let userSlice = useSelector((state) => state.user)
 
   let location = useLocation();
@@ -14,6 +16,7 @@ const Chat = () => {
 
   const [allMessages, setallMessages] = useState([]);
 
+
   const getChat = async () => {
     let res = await axios.get(`http://localhost:8080/chats/getFriendChat/${friendId}`, {
       headers: {
@@ -22,8 +25,11 @@ const Chat = () => {
     })
     let data = res.data;
     console.log(data)
-    console.log(data[0].messages)
-    setallMessages(data[0].messages)
+    if(data.length){
+      console.log(data[0].messages)
+
+      setallMessages(data[0].messages)
+    }
 
   }
 
@@ -35,10 +41,15 @@ const Chat = () => {
   let messageref = useRef()
 
   const handleSendMessage = async()=>{
-      let obj = {
-        text :messageref.current.value
-      }
-      let res = await axios.post(`http://localhost:8080/chats/create/${friendId}`,obj,{
+
+    
+    
+    let obj = {
+      text :messageref.current.value
+    }
+    socket.emit('sendMessage',{...obj,userId:userSlice.user._id, friendId})
+
+    let res = await axios.post(`http://localhost:8080/chats/create/${friendId}`,obj,{
         headers:{
           'Authorization':userSlice.token
         }
@@ -49,6 +60,27 @@ const Chat = () => {
       getChat()
       messageref.current.value = ''
   }
+
+
+  useEffect(()=>{
+    socket.on('recievedMsg',(ans)=>{
+      console.log(ans)
+      setallMessages((prev)=>[...prev,ans])
+    })
+  },[])
+
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  };
+
+
+  // useEffect(()=>{
+  //   if(newMessage){
+  //     setallMessages([...allMessages,newMessage])
+  //   }
+  // },[newMessage])
 
   return (
     <div>
@@ -170,7 +202,7 @@ const Chat = () => {
           </div>
         </div>
         {/* Main Chat Area */}
-        <div className="flex-1">
+        <div className="flex-1 ">
           {/* Chat Header */}
           <header className="bg-white p-4 text-gray-700">
             <h1 className="text-2xl font-semibold text-black">{friendName}</h1>
@@ -179,7 +211,7 @@ const Chat = () => {
 
 
           {/* Chat Messages */}
-          <div className="h-screen overflow-y-auto p-4 pb-36">
+          <div ref={scrollToBottom} className="h-[70vh] bg-red-400 overflow-y-auto relative p-4 pb-36">
           {
   allMessages.map((ele)=>{
     return ele.userId===friendId ? <div className="flex mb-4 cursor-pointer">
@@ -204,13 +236,14 @@ const Chat = () => {
 }
             
 
-            <footer className="bg-white border-t border-gray-300 p-4 absolute bottom-0 w-3/4">
+         
+          </div>
+          <footer className="bg-white border-t border-gray-300 p-4 absolute bottom-0 w-3/4">
               <div className="flex items-center">
                 <input ref={messageref} type="text" placeholder="Type a message..." className="w-full p-2 rounded-md border text-black border-gray-400 focus:outline-none focus:border-blue-500" />
                 <button onClick={handleSendMessage} className="bg-indigo-500 text-white px-4 py-2 rounded-md ml-2">Send</button>
               </div>
             </footer>
-          </div>
         </div>
       </div>
     </div>

@@ -71,7 +71,7 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     // const  {id} = req.params;
-    console.log(req.user)
+    // console.log(req.user)
     try {
         let data = await userCollection.findByIdAndDelete(req.user._id)
         res.status(200).json({ msg: "user deleted successfully" })
@@ -142,14 +142,14 @@ const getLoggedInUser = async (req, res) => {
 const searchUser = async (req, res) => {
  try {
     let { name } = req.query;
-    console.log(name);
+    // console.log(name);
     if(name===''){
        return res.json({users:[]})
     }
     // let regex = new RegExp();
 
     let users = await userCollection.find({ name: new RegExp(name) })
-    console.log(users)
+    // console.log(users)
 
     res.status(200).json({users})
  } catch (error) {

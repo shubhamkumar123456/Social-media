@@ -11,6 +11,10 @@ import ForgetPassword from './pages/ForgetPassword'
 import Profilepage from './pages/Profilepage'
 import FriendProfile from './pages/FriendProfile'
 import Chat from './pages/Chat'
+import { connectSocket } from './store/socketSlice'
+import Run from './pages/Run'
+
+
 
 const App = () => {
   let userSlice = useSelector((state) => state.user);
@@ -25,6 +29,16 @@ const App = () => {
       dispatch(fetchUserByToken(token))
     }
   }, [token])
+
+
+  useEffect(() => {
+    if (userSlice?.user?._id) {
+      dispatch(connectSocket(userSlice?.user?._id)); // Connect when user logs in
+    }
+  }, [userSlice?.user?._id, dispatch]);
+
+
+  
   return (
     <div>
       <BrowserRouter>
@@ -32,6 +46,7 @@ const App = () => {
           <Navbar />
         </div>
         <Routes>
+          <Route path='/run' element={<Run/>}/>
           <Route path='/' element={login === true ? <Home /> : <Navigate to={'/login'} />} />
           <Route path='/profile' element={login === true ? <Profilepage /> : <Navigate to={'/login'} />} />
           <Route path='/signup' element={login === false ? <Signup /> : <Navigate to={'/'} />} />
