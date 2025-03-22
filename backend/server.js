@@ -29,24 +29,7 @@ app.get('/', (req, res) => {
     res.send('hello world')
 })
 
-const onlineUsers = new Map();
 
-
-// io.on('connection', (socket) => {
-//     console.log('User connected:', socket.id);
-//     const userId = socket.handshake.query.userId;
-//     onlineUsers.set(userId, socket.id);
-//     console.log(onlineUsers)
-
-//     socket.on('sendMessage', (message) => {
-//         console.log('Message received:', message);
-//         io.emit('receiveMessage', message);  // Broadcast to all connected clients
-//     });
-
-//     socket.on('disconnect', () => {
-//         console.log('User disconnected:', socket.id);
-//     });
-// });
 
 app.use('/users', userRouter)
 app.use('/posts', postRouter)
@@ -55,23 +38,39 @@ app.use('/chats', chatRouter)
 let users = new Map()
 
 
+function deleteByValue(value) {
+    for (let [key, val] of users) {
+        if (val === value) {
+            users.delete(key);
+
+            return users // Stop after deleting the first occurrence
+        }
+    }
+}
+
 io.on('connection', socket => {
     console.log('connection is established', socket.id)
     socket.on('newUser', (id) => {
         console.log(id)
-        users.set(id,socket.id);
+        users.set(id, socket.id);
         console.log(users)
     })
-    socket.on('sendMessage',({userId,friendId,text})=>{
+    socket.on('sendMessage', ({ userId, friendId, text }) => {
         console.log(userId)
-        console.log("friendId",friendId)
+        console.log("friendId", friendId)
         let friendSocketId = users.get(friendId)
         console.log("friendSocketId", friendSocketId)
-        if(friendSocketId){
-            socket.to(friendSocketId).emit('recievedMsg',{userId,friendId,text})
+        if (friendSocketId) {
+            socket.to(friendSocketId).emit('recievedMsg', { userId, friendId, text })
         }
         console.log(text)
     })
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected:', socket.id);
+        let updatedUsers = deleteByValue(socket.id);
+        console.log(updatedUsers)
+    });
 });
 
 

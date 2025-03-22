@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom'
 import { socket } from "../store/socketSlice"; 
+import ScrollToBottom from 'react-scroll-to-bottom';
 
 const Chat = () => {
   const chatContainerRef = useRef(null);
@@ -202,7 +203,7 @@ const Chat = () => {
           </div>
         </div>
         {/* Main Chat Area */}
-        <div className="flex-1 ">
+        <div  className="flex-1 ">
           {/* Chat Header */}
           <header className="bg-white p-4 text-gray-700">
             <h1 className="text-2xl font-semibold text-black">{friendName}</h1>
@@ -211,7 +212,7 @@ const Chat = () => {
 
 
           {/* Chat Messages */}
-          <div ref={scrollToBottom} className="h-[70vh] bg-red-400 overflow-y-auto relative p-4 pb-36">
+          <ScrollToBottom  className="h-[70vh] bg-red-400 overflow-y-auto relative p-4 ">
           {
   allMessages.map((ele)=>{
     return ele.userId===friendId ? <div className="flex mb-4 cursor-pointer">
@@ -237,7 +238,7 @@ const Chat = () => {
             
 
          
-          </div>
+          </ScrollToBottom>
           <footer className="bg-white border-t border-gray-300 p-4 absolute bottom-0 w-3/4">
               <div className="flex items-center">
                 <input ref={messageref} type="text" placeholder="Type a message..." className="w-full p-2 rounded-md border text-black border-gray-400 focus:outline-none focus:border-blue-500" />
